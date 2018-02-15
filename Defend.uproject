@@ -3,14 +3,10 @@
 	"EngineAssociation": "{17B89F73-46DA-F072-34AF-D6A5F7F6CC30}",
 	"Category": "",
 	"Description": "",
-	"Modules": [
+	"Plugins": [
 		{
-			"Name": "Defend",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine"
-			]
+			"Name": "WebBrowserWidget",
+			"Enabled": true
 		}
 	]
 }
