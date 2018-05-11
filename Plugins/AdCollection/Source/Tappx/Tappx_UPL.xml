@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ EZ-Mobile-Ads - unreal engine 4 ads plugin
+ Copyright (C) 2017 feiwu <feixuwu@outlook.com> All Rights Reserved.
+-->
+<!--Vungle plugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<init>
+		<log text="TappxSDK Android init"/>
+		
+		<!-- get packaging for Vungle from ini and reset it if architecture not supported -->
+		<setBoolFromProperty result="bEnabled" ini="Engine" section="/Script/AdCollectionEditor.TappxSetting" property="bIsAndroidEnabled" default="false"/>
+		<setStringFromProperty result="AppKey" ini="Engine" section="/Script/AdCollectionEditor.TappxSetting" property="AndroidAppKey" default="0"/>
+		<dumpvars/>
+	</init>
+	
+	<!-- optional files or directories to copy to Intermediate/Android/APK -->
+	<resourceCopies>
+	</resourceCopies>
+	
+	<!-- Files to copy before the build so they can be used in the build -->
+	<prebuildCopies>
+	</prebuildCopies>
+
+
+  <!-- AAR dependencies -->
+  <AARImports>
+    <if condition="bEnabled">
+      <true>
+        <insertValue value="repository $S(PluginDir)../ThirdParty/ThirdParty/Android/libs"/>
+        <insertNewline/>
+        <insertValue value="com.tappx,tappx-sdk,3.0.9" />
+        <insertNewline/>
+      </true>
+    </if>
+  </AARImports>
+
+
+	<!-- optional updates applied to AndroidManifest.xml -->
+	<androidManifestUpdates>
+		<if condition="bEnabled">
+			<true>
+
+        <setElement result="AppKeyMetadata" value="meta-data"/>
+        <addAttribute tag="$AppKeyMetadata" name="android:name" value="com.epicgames.ue4.Tappx.AppKey"/>
+        <addAttribute tag="$AppKeyMetadata" name="android:value" value="$S(AppKey)"/>
+        <addElement tag="application" name="AppKeyMetadata"/>
+        
+				<!-- Add permissions -->
+				
+			</true>
+		</if>
+	</androidManifestUpdates>
+
+	<!-- optional additions to proguard -->
+	<proguardAdditions>
+		<if condition="bEnabled">
+			<true>
+      </true>
+		</if>
+	</proguardAdditions>
+
+
+	<!-- optional additions to the GameActivity imports in GameActivity.java -->
+	<gameActivityImportAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Tappx imports
+          import com.ads.util.Tappx;
+        </insert>
+			</true>
+		</if>
+	</gameActivityImportAdditions>
+
+	<!-- optional additions to the GameActivity class in GameActivity.java -->
+	<gameActivityClassAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Begin Tappx gameActivityClassAdditions
+          private Tappx tappxInstance;
+
+          public void AndroidThunkJava_Tappx_ShowBanner(boolean bShowOnBottomOfScreen)
+          {
+          if (tappxInstance != null)
+          {
+          tappxInstance.ShowBanner(bShowOnBottomOfScreen );
+          }
+          }
+
+          public void AndroidThunkJava_Tappx_ShowInterstitialAd()
+          {
+          if (tappxInstance != null)
+          {
+          tappxInstance.ShowInterstitialAd();
+          }
+          }
+
+          public void AndroidThunkJava_Tappx_HideBanner()
+          {
+          if (tappxInstance != null)
+          {
+          tappxInstance.HideAdBanner();
+          }
+          }
+
+          public boolean AndroidThunkJava_Tappx_BannerReady()
+          {
+          if(tappxInstance != null)
+          {
+          return tappxInstance.IsBannerReady();
+          }
+          return false;
+          }
+
+          public boolean AndroidThunkJava_Tappx_InterstitialReady()
+          {
+          if(tappxInstance != null)
+          {
+          return tappxInstance.IsInterstitialReady();
+          }
+          return false;
+          }
+
+          // End Tappx gameActivityClassAdditions
+        </insert>
+			</true>
+		</if>
+	</gameActivityClassAdditions>
+	
+	<!-- optional additions to GameActivity onCreate metadata reading in GameActivity.java -->
+	<gameActivityReadMetadataAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+					
+				</insert>
+			</true>
+		</if>
+	</gameActivityReadMetadataAdditions>
+	
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
+	<gameActivityOnCreateAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Begin Tappx onCreate
+          try
+          {
+          Log.debug("Tappx:Ready Create!");
+          tappxInstance = new Tappx(this, activityLayout);
+
+          final String appKey = _bundle.getString("com.epicgames.ue4.Tappx.AppKey");
+
+          tappxInstance.Init(appKey);
+          Log.debug("Tappx:InitFinish:" + appKey);
+          }
+          catch (Exception e) {
+          e.printStackTrace();
+          }
+
+          // End Tappx onCreate
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnCreateAdditions>
+
+	<!-- optional additions to GameActivity onDestroy in GameActivity.java-->
+	<gameActivityOnDestroyAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Begin Tappx onDestroy
+          if (tappxInstance != null)
+          {
+          tappxInstance.onDestroy();
+          }
+          // End Tappx onDestroy
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnDestroyAdditions>
+	
+	<!-- optional additions to GameActivity onStart in GameActivity.java -->
+	<gameActivityOnStartAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Begin Tappx onStart
+          // End Tappx onStart
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnStartAdditions>
+
+	<!-- optional additions to GameActivity onStop in GameActivity.java -->
+	<gameActivityOnStopAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+          // Begin Tappx onStop
+          // End Tappx onStop
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnStopAdditions>
+
+	<!-- optional additions to GameActivity onPause in GameActivity.java -->
+	<gameActivityOnPauseAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+ 
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnPauseAdditions>
+
+	<!-- optional additions to GameActivity onResume in GameActivity.java -->
+	<gameActivityOnResumeAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+
+        </insert>
+			</true>
+		</if>
+	</gameActivityOnResumeAdditions>
+
+	<!-- optional additions to GameActivity onActivityResult in GameActivity.java -->
+	<gameActivityOnActivityResultAdditions>
+		<if condition="bEnabled">
+			<true>
+				<insert>
+
+				</insert>
+			</true>
+		</if>
+	</gameActivityOnActivityResultAdditions>
+
+	<!-- optional libraries to load in GameActivity.java before libUE4.so -->
+	<soLoadLibrary>
+	</soLoadLibrary>
+</root>

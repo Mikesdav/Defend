@@ -25,16 +25,17 @@
 			"Enabled": true
 		},
 		{
-			"Name": "NiagaraExtras",
-			"Enabled": true
-		},
-		{
 			"Name": "OptionalMobileFeaturesBPLibrary",
 			"Enabled": true
 		},
 		{
 			"Name": "GoogleARCore",
 			"Enabled": true
+		},
+		{
+			"Name": "AdCollection",
+			"Enabled": false,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/526a152589714abe8761800aa58a7469"
 		}
 	]
 }
